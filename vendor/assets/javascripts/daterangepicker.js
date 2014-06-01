@@ -109,6 +109,7 @@
             this.timePickerIncrement = 30;
             this.timePicker12Hour = true;
             this.singleDatePicker = false;
+			this.displayYear = true;
             this.ranges = {};
 
             this.opens = 'right';
@@ -135,7 +136,14 @@
             };
 
             this.cb = function () { };
-
+			
+            if (typeof options.displayYear === 'boolean') {
+                this.displayYear = options.displayYear;
+				this.format = 'MM/DD';
+				this.startDate = moment().startOf('day').format(this.format);
+				this.endDate = moment().endOf('day').format(this.format);
+            }
+			
             if (typeof options.format === 'string')
                 this.format = options.format;
 
@@ -878,7 +886,10 @@
                 html += '<th></th>';
             }
 
-            var dateHtml = this.locale.monthNames[calendar[1][1].month()] + calendar[1][1].format(" YYYY");
+            var dateHtml = this.locale.monthNames[calendar[1][1].month()];
+			if(this.displayYear) {
+				dateHtml +=  + calendar[1][1].format(" YYYY");
+			}
 
             if (this.showDropdowns) {
                 dateHtml = this.renderDropdowns(calendar[1][1], minDate, maxDate);
